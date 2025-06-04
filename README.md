@@ -2,6 +2,9 @@
 
 Flet app using Flet extension.
 
+This version allows entering basic train data to calculate the PZB train type
+based on the brake ratio.
+
 To run the app:
 
 1. Install dependencies from pyproject.toml:
