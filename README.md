@@ -2,8 +2,9 @@
 
 Flet app using Flet extension.
 
-This version allows entering basic train data to calculate the PZB train type
-based on the brake ratio.
+This version allows entering custom wagons to calculate the PZB train type
+based on the brake ratio. Each vehicle can be added with its mass, brake weight
+and length directly in the UI.
 
 To run the app:
 
@@ -25,6 +26,10 @@ poetry run flet build macos -v
 poetry run flet run
 ```
 
+In the app enter the vehicle data for each wagon and click **Hinzufügen**. When
+all wagons are listed press **Berechnen** to see the total mass, brake weight
+and PZB category.
+
 ## Docker
 
 Build the Docker image and run the app:
@@ -39,4 +44,15 @@ Or use Docker Compose:
 ```
 docker compose up --build
 ```
+
+## Command line calculator
+
+To calculate train data from a custom configuration on the command line run:
+
+```
+python -m src.train_calculator_cli
+```
+
+The script will ask for the vehicle data of each wagon or locomotive and
+outputs the resulting train mass, brake weight, brake ratio and PZB type.
 

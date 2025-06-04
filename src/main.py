@@ -1,93 +1,93 @@
 import asyncio
 import flet as ft
 
+from .zug_calculator import berechne_zugdaten
+
 version_number = "ALPHA 0.1"
 
 
 async def main(page: ft.Page):
+    """Flet UI allowing custom train configurations."""
 
-    # Input fields for the train data
-    train_type = ft.Dropdown(
-        label="Zugart",
-        options=[
-            ft.dropdown.Option("Güterzug"),
-            ft.dropdown.Option("Nahverkehr"),
-            ft.dropdown.Option("Fernverkehr"),
-        ],
-        width=200,
-    )
+    wagons: list[dict] = []
+    wagon_list = ft.Column()
 
-    mass_field = ft.TextField(label="Gesamtmasse (t)", width=200)
-    length_field = ft.TextField(label="Länge (m)", width=200)
-
-    brake_setting = ft.Dropdown(
-        label="Bremsstellung",
-        options=[ft.dropdown.Option("R"), ft.dropdown.Option("P"), ft.dropdown.Option("G")],
-        width=200,
-    )
-
-    brake_weight_field = ft.TextField(label="Bremsgewicht (t)", width=200)
+    # input fields for a single vehicle
+    bez_field = ft.TextField(label="Bezeichnung", width=150)
+    anzahl_field = ft.TextField(label="Anzahl", width=80)
+    masse_field = ft.TextField(label="Masse (t)", width=100)
+    bg_field = ft.TextField(label="Bremsgewicht (t)", width=140)
+    laenge_field = ft.TextField(label="Länge (m)", width=100)
 
     result_text = ft.Text(value="")
 
-    async def calculate(e):
-        """Calculate brake ratio and PZB category."""
+    async def add_wagon(e):
         try:
-            mass = float(mass_field.value)
-            brake_weight = float(brake_weight_field.value)
+            w = {
+                "bezeichnung": bez_field.value or "Unbekannt",
+                "anzahl": int(anzahl_field.value),
+                "masse": float(masse_field.value),
+                "bremsgewicht": float(bg_field.value),
+                "laenge": float(laenge_field.value),
+            }
         except (TypeError, ValueError):
             result_text.value = "Ungültige Eingabe"
             await page.update_async()
             return
 
-        ratio = (brake_weight / mass) * 100
-
-        if ratio < 66.6:
-            pzb_type = "U"
-        elif ratio <= 111.1:
-            pzb_type = "M"
-        else:
-            pzb_type = "O"
-
-        result_text.value = (
-            f"Bremsverhältnis: {ratio:.1f}%\nPZB-Zugart: {pzb_type}"
+        wagons.append(w)
+        wagon_list.controls.append(
+            ft.Text(
+                f"{w['bezeichnung']} x{w['anzahl']} - {w['masse']} t, {w['bremsgewicht']} t, {w['laenge']} m"
+            )
         )
-        await page.update_async()
-
-    async def clear(e):
-        mass_field.value = ""
-        length_field.value = ""
-        brake_weight_field.value = ""
-        train_type.value = None
-        brake_setting.value = None
+        bez_field.value = ""
+        anzahl_field.value = ""
+        masse_field.value = ""
+        bg_field.value = ""
+        laenge_field.value = ""
         result_text.value = ""
         await page.update_async()
 
+    async def calculate(e):
+        if not wagons:
+            result_text.value = "Keine Fahrzeuge eingegeben"
+            await page.update_async()
+            return
+        data = berechne_zugdaten(wagons)
+        result_text.value = "\n".join(f"{k}: {v}" for k, v in data.items())
+        await page.update_async()
 
-#---------------------------------------------
+    async def clear(e):
+        wagons.clear()
+        wagon_list.controls.clear()
+        bez_field.value = ""
+        anzahl_field.value = ""
+        masse_field.value = ""
+        bg_field.value = ""
+        laenge_field.value = ""
+        result_text.value = ""
+        await page.update_async()
 
     version = ft.Text(version_number, size=10, color="darkgray", text_align="right")
 
-
-# Add the title and logo to the page
-#TODO Fix logo implementation
-
     title = ft.Text("TSW Zugdatenberechner", size=50)
     logo = ft.Image("assets/tsw-calculator-logo.png", width=50, height=50)
-    page.add(
-        ft.Row([title, logo], alignment=ft.MainAxisAlignment.CENTER)
-    )
-
+    page.add(ft.Row([title, logo], alignment=ft.MainAxisAlignment.CENTER))
     page.add(ft.Row([version], alignment=ft.MainAxisAlignment.END))
 
     page.add(
         ft.Column(
             [
-                train_type,
-                mass_field,
-                length_field,
-                brake_setting,
-                brake_weight_field,
+                ft.Row([
+                    bez_field,
+                    anzahl_field,
+                    masse_field,
+                    bg_field,
+                    laenge_field,
+                    ft.ElevatedButton("Hinzufügen", on_click=add_wagon),
+                ]),
+                wagon_list,
                 ft.Row(
                     [
                         ft.ElevatedButton("Berechnen", color="blue", on_click=calculate),
@@ -101,6 +101,7 @@ async def main(page: ft.Page):
 
     page.update()
 
+
 if __name__ == "__main__":
     ft.app(
         target=main,
@@ -109,5 +110,3 @@ if __name__ == "__main__":
         host="0.0.0.0",
         assets_dir="assets",
     )
-
-
