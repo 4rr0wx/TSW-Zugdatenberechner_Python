@@ -21,3 +21,19 @@ poetry run flet build macos -v
 ```
 poetry run flet run
 ```
+
+## Docker
+
+Build the Docker image and run the app:
+
+```
+docker build -t tsw-zugdatenberechner .
+docker run --rm -p 8080:8080 tsw-zugdatenberechner
+```
+
+Or use Docker Compose:
+
+```
+docker compose up --build
+```
+
