@@ -48,6 +48,13 @@ async def main(page: ft.Page):
 
     page.update()
 
-ft.app(target=main)
+if __name__ == "__main__":
+    ft.app(
+        target=main,
+        view=ft.WEB_BROWSER,
+        port=8080,
+        host="0.0.0.0",
+        assets_dir="assets",
+    )
 
 
