@@ -1,19 +1,19 @@
-import time
+import asyncio
 import flet as ft
 
 version_number = "ALPHA 0.1"
 
 
-def main(page: ft.Page):
+async def main(page: ft.Page):
 
 # Define the calculate function that will be called when the calculate button is clicked
-    def calculate(e):
+    async def calculate(e):
         print("Calculating...")
-        time.sleep(1)
+        await asyncio.sleep(1)
         print("Done!")
 
 # Define the clear function that will be called when the clear button is clicked
-    def clear(e):
+    async def clear(e):
         print("Clearing...")
 
 
@@ -48,6 +48,6 @@ def main(page: ft.Page):
 
     page.update()
 
-ft.app(main)
+ft.app(target=main)
 
 
