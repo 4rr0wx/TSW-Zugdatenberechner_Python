@@ -1,7 +1,7 @@
 import asyncio
 import flet as ft
 
-from .zug_calculator import berechne_zugdaten
+from zug_calculator import berechne_zugdaten
 
 version_number = "ALPHA 0.1"
 
@@ -69,7 +69,7 @@ async def main(page: ft.Page):
         result_text.value = ""
         await page.update_async()
 
-    version = ft.Text(version_number, size=10, color="darkgray", text_align="right")
+    version = ft.Text(version_number, size=10, color="darkgray", text_align=ft.TextAlign.RIGHT)
 
     title = ft.Text("TSW Zugdatenberechner", size=50)
     logo = ft.Image("assets/tsw-calculator-logo.png", width=50, height=50)
@@ -105,8 +105,8 @@ async def main(page: ft.Page):
 if __name__ == "__main__":
     ft.app(
         target=main,
-        view=ft.WEB_BROWSER,
+        view=ft.AppView.WEB_BROWSER,
         port=8080,
-        host="0.0.0.0",
+        host="127.0.0.1",
         assets_dir="assets",
     )

@@ -2,7 +2,7 @@
 
 from typing import List, Dict
 
-from .zug_calculator import berechne_zugdaten
+from zug_calculator import berechne_zugdaten
 
 
 def eingabe_waggon() -> Dict:
