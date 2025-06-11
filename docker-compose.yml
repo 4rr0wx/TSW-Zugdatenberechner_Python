@@ -1,6 +1,6 @@
 version: "3"
 services:
   app:
-    build: .
+    image: ghcr.io/OWNER/REPOSITORY:latest # replace OWNER/REPOSITORY with your namespace
     ports:
       - "8080:8080"
