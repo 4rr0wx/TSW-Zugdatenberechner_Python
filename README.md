@@ -9,6 +9,7 @@ TSW Zugdatenberechner is a small [Flet](https://flet.dev/) application for calcu
 ## Features
 
 * Simple user interface built with Flet
+* Calculates PZB braking percentage (Brems Hundertstel)
 * Animated buttons and dark theme
 * Docker support for easy deployment
 * GitHub workflow for building and publishing a container image
