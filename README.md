@@ -43,15 +43,25 @@ docker build -t tsw-zugdatenberechner .
 docker run --rm -p 8080:8080 tsw-zugdatenberechner
 ```
 
-Or start everything via Docker Compose:
+### Deploy with Docker Compose
 
-```bash
-docker compose up
-```
+A pre-built image is published to the [GitHub Container Registry](https://ghcr.io) as `ghcr.io/OWNER/TSW-Zugdatenberechner_Python:latest` (replace `OWNER` with your GitHub username or organization).
+
+1. Log in to GHCR if required:
+
+   ```bash
+   echo "$GITHUB_TOKEN" | docker login ghcr.io -u YOUR_GITHUB_USER --password-stdin
+   ```
+
+2. Start the container using the provided Compose file:
+
+   ```bash
+   docker compose up -d
+   ```
 
 ## Deployment
 
-The repository includes a GitHub Actions workflow that builds the Docker image and publishes it to the GitHub Container Registry (GHCR). If you use [Komodo](https://komodo.dev/) or a similar service, you can automatically redeploy the container whenever a new image is available. The workflow runs on pushes to the `main` branch and requires no additional secrets beyond the default `GITHUB_TOKEN`.
+The repository includes a GitHub Actions workflow that builds the Docker image and publishes it to GHCR. Services like [Komodo](https://komodo.dev/) can watch the registry and automatically redeploy the container when a new image is available. The workflow runs on pushes to the `main` branch and requires no additional secrets beyond the default `GITHUB_TOKEN`.
 
 ## License
 
