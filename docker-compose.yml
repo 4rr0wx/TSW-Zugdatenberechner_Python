@@ -1,6 +1,9 @@
-version: "3"
+version: "3.8"
+
 services:
   app:
-    image: ghcr.io/OWNER/REPOSITORY:latest # replace OWNER/REPOSITORY with your namespace
+    image: ghcr.io/OWNER/TSW-Zugdatenberechner_Python:latest # replace OWNER with your GitHub username or org
+    container_name: tsw-zugdatenberechner
+    restart: unless-stopped
     ports:
       - "8080:8080"
